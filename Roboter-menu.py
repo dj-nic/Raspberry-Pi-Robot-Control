@@ -1,6 +1,3 @@
-# Please give credit if you use my Code <3
-
-
 # RPi GPIO Bibliothek importieren
 import RPi.GPIO as GPIO
 import time
@@ -97,8 +94,8 @@ print(26 * "#")
 print()
 
 while True:
-    userdirection = input("Wählen Sie eine Fahrmodi durch \nEingabe des jeweiligen Kürzels aus: ")
-    if userdirection in ["auto", "manu"]:
+    usermode = input("Wählen Sie eine Fahrmodi durch \nEingabe des jeweiligen Kürzels aus: ")
+    if usermode in ["auto", "manu"]:
         break
     else:
         print("Ungültige Eingabe! Bitte wählen Sie eine der folgenden Optionen: auto, manu.")
@@ -110,7 +107,7 @@ print(" vorwärts: \t\tfwd")
 print(" rückwärts: \tbwd")
 print(" linksdrehen: \tleft")
 print(" rechtsdrehen: \tright")
-print(" stop: \t\t\tstop")
+print(" stop: \t\t\ts")
 print()
 print(38 * "#")
 print()
@@ -119,27 +116,49 @@ print()
 # Eine while-Schleife wird verwendet, um eine gültige Benutzereingabe zu erhalten.
 # Die if-Anweisung überprüft, ob die Eingabe in der Liste ["fwd", "bwd", "left", "right"] enthalten ist.
 # Wenn die Eingabe gültig ist, wird die Schleife mit break beendet.
+if usermode == "auto":
+    while True:
+        userdirection = input("Wählen Sie eine Art durch \nEingabe des jeweiligen Kürzels aus: ")
+        if userdirection in ["Tesla Autpilot", "Supersonic","s"]:
+            break
+        else:
+            print("Ungültige Eingabe! Bitte wählen Sie eine der folgenden Optionen: Tesla Autopilot, Supersonic oder s.")
+
+if usermode == "manu":
+    while True:
+        userdirection = input("Wählen Sie eine Fahrtrichtung durch \nEingabe des jeweiligen Kürzels aus: ")
+        if userdirection in ["fwd", "bwd", "left", "right", "s"]:
+            break
+        else:
+            print("Ungültige Eingabe! Bitte wählen Sie eine der folgenden Optionen: fwd, bwd, left oder right.")
+
+# Algorithmus zur Auswahl der Fahrtrichtung
 while True:
-    userdirection = input("Wählen Sie eine Fahrtrichtung durch \nEingabe des jeweiligen Kürzels aus: ")
-    if userdirection in ["fwd", "bwd", "left", "right", "stop"]:
+    if userdirection == "fwd":
+     motorvorwaerts()
+     time.sleep(0.1)
+    elif userdirection == "bwd":
+        motorrueckwerts()
+        time.sleep(0.1)
+    elif userdirection == "left":
+        motorlinks()
+        time.sleep(0.1)
+    elif userdirection == "right":
+        motorrechts()
+        time.sleep(0.1)
+    elif userdirection == "s":
+        motorstop()
+        time.sleep(0.1)
+    elif KeyboardInterrupt:
+        motorstop()
         break
-    else:
-        print("Ungültige Eingabe! Bitte wählen Sie eine der folgenden Optionen: fwd, bwd, left oder right.")
 
-# Algorithmus zur Auswahl der Fahrtrichtung -- Muss noch überarbeitet werden
-if userdirection == "fwd":
-  motorvorwaerts()
-  time.sleep(5)
-elif userdirection == "bwd":
-  motorrueckwerts()
-  time.sleep(5)
-elif userdirection == "left":
-    motorlinks()
-    time.sleep(5)
-elif userdirection == "right":
-    motorrechts()
-    time.sleep(5)
+    # Zurück zur ersten Schleife für eine erneute Benutzereingabe
+    userdirection = input("Wählen Sie eine Fahrtrichtung durch \nEingabe des jeweiligen Kürzels aus: ")
+    continue
 
+
+# Ultraschallsensor
 try:
     while True:
         distance = get_distance()
