@@ -1,3 +1,6 @@
+# Please give credit if you use my Code <3
+
+
 # RPi GPIO Bibliothek importieren
 import RPi.GPIO as GPIO
 import time
